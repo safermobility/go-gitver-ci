@@ -1,30 +1,31 @@
-# [Go GitVer](https://git.rootprojects.org/root/go-gitver)
+# [Go GitVer](https://github.com/safermobility/go-gitver-ci)
 
 Use **git tags** to add (GoReleaser-compatible) [**semver**](https://semver.org/)
 to your go package in under 150
-[lines of code](https://git.rootprojects.org/root/go-gitver/src/branch/master/gitver/gitver.go).
+[lines of code](https://github.com/safermobility/go-gitver-ci/blob/master/gitver/gitver.go).
 
 ```txt
 Goals:
 
-      1. Use an exact `git tag` version, like v1.0.0, when clean
-      2. Translate the `git describe` version  (v1.0.0-4-g0000000)
+      1. When present, use CI environment variables
+      2. Use an exact `git tag` version, like v1.0.0, when clean
+      3. Translate the `git describe` version  (v1.0.0-4-g0000000)
 	     to semver (1.0.1-pre4+g0000000) in between releases
-      3. Note when `dirty` (and have build timestamp)
+      4. Note when `dirty` (and have build timestamp)
 
       Fail gracefully when git repo isn't available.
 ```
 
 # GoDoc
 
-See <https://pkg.go.dev/git.rootprojects.org/root/go-gitver/v2>.
+See <https://pkg.go.dev/github.com/safermobility/go-gitver-ci/v2>.
 
 # How it works
 
 1. You define the fallback version and version printing in `main.go`:
 
 ```go
-//go:generate go run git.rootprojects.org/root/go-gitver/v2
+//go:generate go run github.com/safermobility/go-gitver-ci/v2
 
 package main
 
@@ -47,7 +48,7 @@ func main() {
 }
 ```
 
-2. You `go generate` or `go run git.rootprojects.org/root/go-gitver/v2` to generate `xversion.go`:
+2. You `go generate` or `go run github.com/safermobility/go-gitver-ci/v2` to generate `xversion.go`:
 
 ```go
 package main
@@ -64,7 +65,7 @@ func init() {
 Generate an `xversion.go` file:
 
 ```bash
-go run git.rootprojects.org/root/go-gitver/v2
+go run github.com/safermobility/go-gitver-ci/v2
 cat xversion.go
 ```
 
@@ -86,7 +87,7 @@ most other files.</small>
 See `go-gitver`s self-generated version:
 
 ```bash
-go run git.rootprojects.org/root/go-gitver/v2 version
+go run github.com/safermobility/go-gitver-ci/v2 version
 ```
 
 ```txt
@@ -100,7 +101,7 @@ v1.1.4-pre2+g6dace82
 Add this to the top of your main file, so that it runs with `go generate`:
 
 ```go
-//go:generate go run -mod=vendor git.rootprojects.org/root/go-gitver/v2
+//go:generate go run -mod=vendor github.com/safermobility/go-gitver-ci/v2
 
 ```
 
@@ -111,7 +112,7 @@ Add a file that imports go-gitver (for versioning)
 
 package example
 
-import _ "git.rootprojects.org/root/go-gitver/v2"
+import _ "github.com/safermobility/go-gitver-ci/v2"
 ```
 
 Change you build instructions to be something like this:
@@ -143,12 +144,12 @@ GITVER_FAIL=true
 For example:
 
 ```go
-//go:generate go run -mod=vendor git.rootprojects.org/root/go-gitver/v2 --fail
+//go:generate go run -mod=vendor github.com/safermobility/go-gitver-ci/v2 --fail
 
 ```
 
 ```bash
-go run -mod=vendor git.rootprojects.org/root/go-gitver/v2 version
+go run -mod=vendor github.com/safermobility/go-gitver-ci/v2 version
 ```
 
 # Usage
@@ -157,9 +158,9 @@ See `examples/basic`
 
 1. Create a `tools` package in your project
 2. Guard it against regular builds with `// +build tools`
-3. Include `_ "git.rootprojects.org/root/go-gitver/v2"` in the imports
+3. Include `_ "github.com/safermobility/go-gitver-ci/v2"` in the imports
 4. Declare `var commit, version, date string` in your `package main`
-5. Include `//go:generate go run -mod=vendor git.rootprojects.org/root/go-gitver/v2` as well
+5. Include `//go:generate go run -mod=vendor github.com/safermobility/go-gitver-ci/v2` as well
 
 `tools/tools.go`:
 
@@ -170,14 +171,14 @@ See `examples/basic`
 package tools
 
 import (
-	_ "git.rootprojects.org/root/go-gitver/v2"
+	_ "github.com/safermobility/go-gitver-ci/v2"
 )
 ```
 
 `main.go`:
 
 ```go
-//go:generate go run git.rootprojects.org/root/go-gitver/v2 --fail
+//go:generate go run github.com/safermobility/go-gitver-ci/v2 --fail
 
 package main
 
@@ -200,7 +201,7 @@ If you're using `go mod vendor` (which I highly recommend that you do),
 you'd modify the `go:generate` ever so slightly:
 
 ```go
-//go:generate go run -mod=vendor git.rootprojects.org/root/go-gitver/v2 --fail
+//go:generate go run -mod=vendor github.com/safermobility/go-gitver-ci/v2 --fail
 ```
 
 The only reason I didn't do that in the example is that I'd be included
@@ -208,7 +209,7 @@ the repository in itself and that would be... weird.
 
 # Why a tools package?
 
-> import "git.rootprojects.org/root/go-gitver/v2" is a program, not an importable package
+> import "github.com/safermobility/go-gitver-ci/v2" is a program, not an importable package
 
 Having a tools package with a build tag that you don't use is a nice way to add exact
 versions of a command package used for tooling to your `go.mod` with `go mod tidy`,
@@ -248,8 +249,8 @@ git rev-parse HEAD
 ### cannot find package "."
 
 ```txt
-package git.rootprojects.org/root/go-gitver/v2: cannot find package "." in:
-	/Users/me/go-example/vendor/git.rootprojects.org/root/go-gitver/v2
+package github.com/safermobility/go-gitver-ci/v2: cannot find package "." in:
+	/Users/me/go-example/vendor/github.com/safermobility/go-gitver-ci/v2
 cmd/example/example.go:1: running "go": exit status 1
 ```
 

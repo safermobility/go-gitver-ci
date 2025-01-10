@@ -1,4 +1,4 @@
-//go:generate go run -mod=vendor git.rootprojects.org/root/go-gitver/v2
+//go:generate go run -mod=vendor github.com/safermobility/go-gitver-ci/v2
 
 package main
 
@@ -10,7 +10,7 @@ import (
 	"text/template"
 	"time"
 
-	"git.rootprojects.org/root/go-gitver/v2/gitver"
+	"github.com/safermobility/go-gitver-ci/v2/gitver"
 )
 
 var commit, version, date string

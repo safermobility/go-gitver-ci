@@ -1,3 +1,3 @@
-module git.rootprojects.org/root/go-gitver/v2
+module github.com/safermobility/go-gitver-ci/v2
 
-go 1.12
+go 1.21
