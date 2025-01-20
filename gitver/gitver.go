@@ -2,6 +2,7 @@ package gitver
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"regexp"
 	"strconv"
@@ -33,13 +34,14 @@ func ExecAndParse() (*Versions, error) {
 	var desc string
 	var rev string
 	var ts time.Time
+	var err error
 
 	// GitLab CI variables
 	// Add `- export GIT_DESC=$(git describe)` to your `before_script` to use this
 	if os.Getenv("GITLAB_CI") != "" && os.Getenv("GIT_DESCRIBE") != "" {
 		desc = strings.TrimSpace(os.Getenv("GIT_DESCRIBE"))
 	} else {
-		desc, err := gitDesc()
+		desc, err = gitDesc()
 		if nil != err {
 			return nil, err
 		}
@@ -48,7 +50,7 @@ func ExecAndParse() (*Versions, error) {
 	if os.Getenv("GITLAB_CI") != "" && os.Getenv("CI_COMMIT_SHA") != "" {
 		rev = os.Getenv("CI_COMMIT_SHA")
 	} else {
-		rev, err := gitRev()
+		rev, err = gitRev()
 		if nil != err {
 			return nil, err
 		}
@@ -57,19 +59,19 @@ func ExecAndParse() (*Versions, error) {
 	if os.Getenv("GITLAB_CI") != "" && os.Getenv("CI_COMMIT_TAG") != "" {
 		ver = strings.TrimPrefix(os.Getenv("CI_COMMIT_TAG"), "v")
 	} else {
-		ver, err := semVer(desc)
+		ver, err = semVer(desc)
 		if nil != err {
 			return nil, err
 		}
 	}
 
 	if os.Getenv("GITLAB_CI") != "" && os.Getenv("CI_COMMIT_TAG") != "" {
-		ts, err := time.Parse(time.RFC3339, strings.TrimSpace(os.Getenv("CI_COMMIT_TIMESTAMP")))
+		ts, err = time.Parse(time.RFC3339, strings.TrimSpace(os.Getenv("CI_COMMIT_TIMESTAMP")))
 		if nil != err {
 			ts = time.Now()
 		}
 	} else {
-		ts, err := gitTimestamp(desc)
+		ts, err = gitTimestamp(desc)
 		if nil != err {
 			ts = time.Now()
 		}
