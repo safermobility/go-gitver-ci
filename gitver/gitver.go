@@ -66,7 +66,7 @@ func ExecAndParse() (*Versions, error) {
 		}
 	}
 
-	if os.Getenv("GITLAB_CI") != "" && os.Getenv("CI_COMMIT_TAG") != "" {
+	if os.Getenv("GITLAB_CI") != "" && os.Getenv("CI_COMMIT_TIMESTAMP") != "" {
 		ts, err = time.Parse(time.RFC3339, strings.TrimSpace(os.Getenv("CI_COMMIT_TIMESTAMP")))
 		if nil != err {
 			ts = time.Now()
