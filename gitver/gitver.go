@@ -38,7 +38,7 @@ func ExecAndParse() (*Versions, error) {
 	var err error
 
 	// GitLab CI variables
-	// Add `- export GIT_DESC=$(git describe)` to your `before_script` to use this
+	// Add `- export GIT_DESCRIBE=$(git describe)` to your `before_script` to use this
 	if os.Getenv("GITLAB_CI") != "" && os.Getenv("GIT_DESCRIBE") != "" {
 		desc = strings.TrimSpace(os.Getenv("GIT_DESCRIBE"))
 	} else {
