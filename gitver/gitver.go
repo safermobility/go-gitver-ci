@@ -33,6 +33,7 @@ type Versions struct {
 func ExecAndParse() (*Versions, error) {
 	var desc string
 	var rev string
+	var ver string
 	var ts time.Time
 	var err error
 
